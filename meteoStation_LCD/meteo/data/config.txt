@@ -1,0 +1,192 @@
+﻿// if #define ftp можно заменять файл по FTP//you can replace the file by FTP
+//user=esp8266/passw=esp8266  
+// или http://ESP-IP/
+//предупреждения на экран (prevention on the screen)
+
+#key;*******; //key openW
+#p_min;755; //давление упало <мин (prevention min. pressure)
+#p_max;765;// давление выше> макс (prevention max. pressure)
+#v_max;7;	//скорость ветра>=   (prevention wind speed) 
+#TIMEZONE;5;
+#lat;*********;
+#lon;*********;
+#t_max;29;// темпер макс (temperature>max)
+#t_min;-15;	//темпер мин  (temperature<min)
+#uv_max;7;	// ультрофиолет >макс (Ultra-violet radiation>)
+#delta_p;+1;// +- поправка давления openW в комнате (bme+read NRF24,R433)//correction of pressure sensor)
+#delta_t;-2;//+- поправка температуры в комнате (bme,dht,aht+read NRF24,R433) (correction of temp room)
+#delta_t0;+2;//+- поправка температуры c улицы (ds1820,dht,aht+read NRF24,R433) (correction of temp street)
+#beep_b;10;	// сигнал начало, кажд час, (buzzer signal start every hour)
+#beep_e;23;// сигнал конец (signal buzzer stop)
+#beep_mp3_vol;90;// beep.mp3 file esp32 сигнал каждый час (signal each hour)
+#t_b;22; 	// ночные часы начало (night screen start)	
+#t_e;6;	// ноч. конец (night screen stop)
+#scr_name_def;S2; //экран по умолчанию (screen after loading)
+
+
+//экраны по кругу / screens around
+#S1_show;30;//если надо менять экраны по времени 
+#S2_show;60;
+#S3_show;50;//if it is necessary to change screens on time sec
+//#S4_show;15;
+//#S5_show;55;
+//#S6_show;15; //график graph
+//#Sg_show;15; //график graph
+//#Sf_show;15; //foto 
+//#S0_show;40; //no openW, актуально если есть SD
+
+//сколько sec показывать фото
+#Sf_t_slide;15; //sec slide foto, if pin_sd card SD/foto/
+#Sf2_slide_on_play;1; //показывать слайд во время игры (0-нет 1-да) //if #def def_core0 
+//TIMER
+//beep ifdef pin_beep
+#tm_alarm_count_beep;30;
+#tm_alarm_period_beep;10;  //sec,  time between signals
+
+//mp3 file play /timer.mp3 (ESP32)
+#tm_alarm_count;5; //
+#tm_alarm_period;10;//sec,  time between signals
+
+
+#mp3_random;;// mp3 play sort random
+//% громкость  в по умолчанию если не указана в (stat,fm).txt/default volume if not specified in ((stat,fm)).txt
+#play_mp3_vol;25;// mp3 player volume default(1-100)
+#play_vol;25;// WWW player volume default(1-100)
+#play_fm_vol;15;// FM volume default (1-15)
+
+
+//-----------IoT  SEND  https://www.thingspeak.com
+#iot_id;xxxxx;//Channel ID
+#iot_key;xxxxxxxxxxxxxxxx;
+#iot_period_send;300;	//period send sec >=20s
+#iot_T1_fld_send;1;	//temp квартира(room);ном поля(num field) bme bmp280 HTU21D SI7021
+#iot_H_fld_send;2;	//humidity квартира(room) bme280 HTU21D SI7021
+#iot_T0_fld_send;3;	//temp улица(street)ds1820
+#iot_P_fld_send;4; //давление(pressure)   bme bmp280 or openw
+#iot_W_fld_send;5; //скорость ветра (wind speed) openw
+#iot_R_fld_send;6; //дождь мм(rain) openw
+
+//--------iot read------------------
+#iot_id_read;xxxxxx;
+#iot_key_read;xxxxxxxxxxxxxxxx;
+#iot_period_read;25;
+#iot_T1_fld_read;1;
+#iot_H_fld_read;2;
+#iot_T0_fld_read;3;
+#iot_P_fld_read;4;
+#iot_VCC_fld_read;5; //уличный vcc
+
+
+//-------------TFT Led ----pin_led--------------
+#led_def;100; // яркость TFT 0-100,TFT brightness 0-100
+#led_night;20; // яркость ночью ,brightness at night
+#led_sunset;50; // яркость после захода ,after sunset
+
+//------------- Led OFF----pin_pir--------------
+#t_pir_period;300; // отключаю дисплей, если не было движения секунд=
+		    //disable the display if there was no movement seconds
+
+
+//-----------------GPIO_OUT-----DEF_VAL---------
+#pin_out1;55; // 0-100 (0-3.3V)
+//#pin_out2;0; // 0-100 (0-3.3V)
+//#pin_out3;0; // 0-100 (0-3.3V)
+//#pin_out4;0; // 0-100 (0-3.3V)
+//#pin_out5;0; // 0-100 (0-3.3V)
+
+
+
+//-------------#ifdef mqtt in setting--------
+#mqtt_esp_name;meteo;		//client name
+#mqtt_server;192.168.100.100;	//mqtt server
+#mqtt_port=1883;			//port
+#mqtt_user;mqtt;
+#mqtt_password;mqtt;
+#t_reconn_mqtt;10;			//on err connect,reconnect sec			  
+#mqtt_period_send = 40;		//period send sec
+
+//SEND
+//#mqtt_H_topic_send;home/zal/Hum; 	//влажность humidity bme280
+//#mqtt_T1_topic_send;home/zal/Temp;	//Temp IN
+//#mqtt_T0_topic_send;out/Temp;		//Temp OUTside
+//#mqtt_P_topic_send;home/zal/Pr;	//pressure bme280
+#mqtt_song_topic_send;test/song;	//esp32+def AUDIO+def mqtt_send
+#mqtt_plist_topic_send;test/plist;	//esp32+def AUDIO+def mqtt_send playlist+...
+//READ
+#mqtt_H_topic_read;home/zal/Hum;	//влажность humidity bme280
+#mqtt_T1_topic_read;home/zal/Temp;	//T_topic - Temp IN
+#mqtt_T0_topic_read;out/Temp;			//T2_topic - Temp OUT
+#mqtt_P_topic_read;home/zal/Pr;		//pressure bme280 bmp
+//#mqtt_VCC_topic_read;testEsp/VCC;		//VCC bat
+
+
+#mqtt_CMD_topic_read;test/Cmd;		//чтение всех команд см. в infn_cmd.xls
+
+//---------#ifdef gpio_out in Settings_control.h
+#mqtt_out1_topic_read;test/out1_r; //можно напрямую слать цифровое значение c телефона на пин OUT1
+#mqtt_out1_topic_send;test/out1_s; //отправка актуального значения c пина OUT1, для обратной связи
+//цвет можно только на Out1
+#mqtt_out1_topic_read_color;test/out1_r_c; //READ color WS2812B если define pin_out1_color_leds
+#mqtt_out1_topic_send_color;test/out1_s_c; //SEND WS2812B ifdefine pin_out1_color_leds , для обратной связи
+
+#mqtt_out2_topic_read;test/out2_r; //---
+#mqtt_out2_topic_send;test/out2_s; //---
+//#mqtt_out3_topic_read;xxxxxx; //---
+//#mqtt_out3_topic_send;xxxxxx; //---
+//#mqtt_out4_topic_read;xxxxxx; //---
+//#mqtt_out4_topic_send;xxxxxx; //---
+//#mqtt_out5_topic_read;xxxxxx; //---
+//#mqtt_out5_topic_send;xxxxxx; //---
+
+
+
+
+
+//постоянный контроль наличия wifi, если пропал переподкл. через сек.
+#wifi_force_connect;40;		//40sec 
+
+
+//-------------------------------if pin_analog_key1 
+//фактические значения смотри в монитор порта 
+
+#key1_debounce;50;// установка времени антидребезга 
+#key1_timeout;300;  // установка таймаута удержания 
+#key1_clicktimeout;500; // установка таймаута между кликами 
+#key1_steptimeout;400; // установка таймаута между инкрементами 
+
+
+//--------5--key-1-----------
+#key1btn1_min;800;
+#key1btn1_max;1200;
+#key1btn2_min;1500;
+#key1btn2_max;2200;
+#key1btn3_min;2500;
+#key1btn3_max;3300;
+#key1btn4_min;3500;
+#key1btn4_max;5000;
+//#key1btn5_min;3500;
+//#key1btn5_max;5000;
+
+
+//-------------------------------if pin_analog_key1 
+#key2_debounce;50;// установка времени антидребезга 
+#key2_timeout;300;  // установка таймаута удержания 
+#key2_clicktimeout;500; // установка таймаута между кликами 
+#key2_steptimeout;400; // установка таймаута между инкрементами 
+
+//--------5--key-2-----------
+#key2btn1_min;800;
+#key2btn1_max;1800;
+#key2btn2_min;2000;
+#key2btn2_max;3000;
+#key2btn3_min;4001;
+#key2btn3_max;5000;
+//#key2btn4_min;400;
+//#key2btn4_max;700;
+//#key2btn5_min;1000;
+//#key2btn5_max;1500;
+
+
+//-------------------------------telegram
+#tlg_token;xxxxxxxxxxxx:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx;
+#chat_id;xxxxxxxxxxxxxxxx;
